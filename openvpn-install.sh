@@ -274,8 +274,8 @@ else
 	cd /etc/openvpn/easy-rsa/
 	# If the user selected the fast, less hardened version
 	if [[ "$VARIANT" = '1' ]]; then
-		echo "set_var EASYRSA_KEY_SIZE 2048
-set_var EASYRSA_KEY_SIZE 2048
+		echo "set_var EASYRSA_KEY_SIZE 1024
+set_var EASYRSA_KEY_SIZE 1024
 set_var EASYRSA_DIGEST "sha256"" > vars
 	fi
 	# If the user selected the relatively slow, ultra hardened version
@@ -310,12 +310,12 @@ group $NOGROUP
 topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
-cipher AES-256-CBC
+cipher none
 auth SHA512
 tls-version-min 1.2" > /etc/openvpn/server.conf
 	if [[ "$VARIANT" = '1' ]]; then
 		# If the user selected the fast, less hardened version
-		echo "tls-cipher TLS-DHE-RSA-WITH-AES-128-GCM-SHA256" >> /etc/openvpn/server.conf
+		echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384" >> /etc/openvpn/server.conf
 	elif [[ "$VARIANT" = '2' ]]; then
 		# If the user selected the relatively slow, ultra hardened version
 		echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384" >> /etc/openvpn/server.conf
@@ -448,13 +448,13 @@ nobind
 persist-key
 persist-tun
 remote-cert-tls server
-cipher AES-256-CBC
+cipher none
 auth SHA512
 tls-version-min 1.2
 tls-client" > /etc/openvpn/client-common.txt
 	if [[ "$VARIANT" = '1' ]]; then
 		# If the user selected the fast, less hardened version
-		echo "tls-cipher TLS-DHE-RSA-WITH-AES-128-GCM-SHA256" >> /etc/openvpn/client-common.txt
+		echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384" >> /etc/openvpn/client-common.txt
 	elif [[ "$VARIANT" = '2' ]]; then
 		# If the user selected the relatively slow, ultra hardened version
 		echo "tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384" >> /etc/openvpn/client-common.txt
